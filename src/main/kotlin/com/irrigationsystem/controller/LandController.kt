@@ -25,7 +25,7 @@ class LandController(@Autowired private val iLandService: ILandService) {
     }
 
     @PutMapping("/{id}")
-    fun editLand(@PathVariable("id") landId: Long, @RequestBody landDtoRequest: LandDtoRequest?): ResponseEntity<LandDtoResponse>{
+    fun editLandById(@PathVariable("id") landId: Long, @RequestBody landDtoRequest: LandDtoRequest?): ResponseEntity<LandDtoResponse>{
         return ResponseEntity(iLandService.editLand(landId, landDtoRequest), HttpStatus.OK)
     }
 
