@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS irrigation_period(
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP DEFAULT NULL,
     is_successful BIT DEFAULT 0,
-    irrigation_configuration_id INT NOT NULL,
+    irrigation_configuration_id INT,
     PRIMARY KEY(id)
 );
 

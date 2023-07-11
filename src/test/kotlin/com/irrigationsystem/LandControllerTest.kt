@@ -27,9 +27,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 class LandControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val landService: ILandService,
-    @Autowired private val objectMapper: ObjectMapper,
-    @Autowired private val landRepository: ILandRepository
-) {
+    @Autowired private val objectMapper: ObjectMapper
+    ) {
 
     private lateinit var landDtoRequestToBeUsed1: LandDtoRequest
     private lateinit var landDtoRequestToBeUsed2: LandDtoRequest

@@ -21,7 +21,7 @@ class SensorController(@Autowired private val sensorService: ISensorService) {
 
     @PostMapping
     fun createSensor(@RequestBody sensorDtoRequest: SensorDtoRequest): ResponseEntity<SensorDtoResponse>{
-        return ResponseEntity(sensorService.createService(sensorDtoRequest), HttpStatus.CREATED)
+        return ResponseEntity(sensorService.createSensor(sensorDtoRequest), HttpStatus.CREATED)
     }
 
     @GetMapping

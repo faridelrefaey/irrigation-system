@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 @Transactional
 interface ISensorService {
 
-    fun createService(sensorDtoRequest: SensorDtoRequest): SensorDtoResponse
+    fun createSensor(sensorDtoRequest: SensorDtoRequest): SensorDtoResponse
 
     fun getAllSensors(): List<SensorDtoResponse>
 

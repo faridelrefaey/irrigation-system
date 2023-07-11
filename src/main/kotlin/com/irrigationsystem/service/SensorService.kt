@@ -28,7 +28,7 @@ class SensorService(
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
 
-    override fun createService(sensorDtoRequest: SensorDtoRequest): SensorDtoResponse {
+    override fun createSensor(sensorDtoRequest: SensorDtoRequest): SensorDtoResponse {
         return sensorMapper.mapEntityToDtoResponse(sensorRepository.save(sensorMapper.mapDtoRequestToEntity(sensorDtoRequest)))
     }
 
