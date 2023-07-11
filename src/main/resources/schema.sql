@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS land;
-
 CREATE TABLE IF NOT EXISTS land(
     id INT NOT NULL AUTO_INCREMENT,
     seed_type VARCHAR(50) NOT NULL,
@@ -7,8 +5,6 @@ CREATE TABLE IF NOT EXISTS land(
     area FLOAT NOT NULL,
     PRIMARY KEY(id)
 );
-
-DROP TABLE IF EXISTS irrigation_configuration;
 
 CREATE TABLE IF NOT EXISTS irrigation_configuration(
     id INT NOT NULL AUTO_INCREMENT,
@@ -21,15 +17,11 @@ CREATE TABLE IF NOT EXISTS irrigation_configuration(
     PRIMARY KEY(id)
 );
 
-DROP TABLE IF EXISTS sensor;
-
 CREATE TABLE IF NOT EXISTS sensor(
     id INT NOT NULL AUTO_INCREMENT,
     sensor_name VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
 );
-
-DROP TABLE IF EXISTS irrigation_period;
 
 CREATE TABLE IF NOT EXISTS irrigation_period(
     id INT NOT NULL AUTO_INCREMENT,

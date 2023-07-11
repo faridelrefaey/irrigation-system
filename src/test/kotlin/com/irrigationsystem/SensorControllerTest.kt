@@ -13,7 +13,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -30,6 +32,7 @@ class SensorControllerTest(
 
     private lateinit var sensorDtoRequest1: SensorDtoRequest
     private lateinit var sensorDtoRequest2: SensorDtoRequest
+
 
     @BeforeEach
     fun setUp(){
@@ -53,6 +56,7 @@ class SensorControllerTest(
         sensorService.createSensor(sensorDtoRequest1)
         sensorService.createSensor(sensorDtoRequest2)
 
+        println(sensorService.getAllSensors())
         mockMvc.perform(MockMvcRequestBuilders.get("/sensor"))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
