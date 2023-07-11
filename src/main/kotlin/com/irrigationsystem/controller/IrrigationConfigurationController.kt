@@ -38,4 +38,5 @@ class IrrigationConfigurationController(@Autowired private val iIrrigationConfig
     fun deleteIrrigationConfigurationById(@PathVariable("id") irrigationConfigurationId: Long): ResponseEntity<String>{
         return ResponseEntity(iIrrigationConfigurationService.deleteIrrigationConfigurationById(irrigationConfigurationId), HttpStatus.OK)
     }
+
 }

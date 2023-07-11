@@ -2,6 +2,8 @@ package com.irrigationsystem.service
 
 import com.irrigationsystem.dto.IrrigationConfigurationDtoRequest
 import com.irrigationsystem.dto.IrrigationConfigurationDtoResponse
+import com.irrigationsystem.dto.IrrigationPeriodDtoRequest
+import com.irrigationsystem.dto.IrrigationPeriodDtoResponse
 import com.irrigationsystem.entity.IrrigationConfiguration
 import com.irrigationsystem.entity.IrrigationPeriod
 import com.irrigationsystem.entity.Land
@@ -9,6 +11,7 @@ import com.irrigationsystem.entity.Sensor
 import com.irrigationsystem.exceptions.IdDoesNotExistException
 import com.irrigationsystem.exceptions.InvalidRequestBodyException
 import com.irrigationsystem.mapper.IrrigationConfigurationMapper
+import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
 import com.irrigationsystem.repository.ISensorRepository
 import com.irrigationsystem.repository.IrrigationConfigurationRepository
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.Optional
+import javax.swing.text.html.Option
 import kotlin.math.roundToLong
 
 @Service
@@ -27,85 +31,151 @@ class IrrigationConfigurationService(
     @Autowired private val landRepository: ILandRepository,
     @Autowired private val sensorRepository: ISensorRepository,
     @Autowired private val irrigationPeriodService: IrrigationPeriodService
-): IIrrigationConfigurationService {
+) : IIrrigationConfigurationService {
 
     private val irrigationConfigurationMapper = IrrigationConfigurationMapper()
+    private val irrigationPeriodMapper = IrrigationPeriodMapper()
 
-    private lateinit var savedIrrigationConfiguration: IrrigationConfiguration
 
     override fun createIrrigationConfiguration(irrigationConfigurationDtoRequest: IrrigationConfigurationDtoRequest): IrrigationConfigurationDtoResponse {
-        if(irrigationConfigurationDtoRequest.sensorId == null || irrigationConfigurationDtoRequest.landId == null){
-            throw InvalidRequestBodyException("Please add land ID and sensor ID")
-        }
-        if(irrigationConfigurationDtoRequest.startDate == null || irrigationConfigurationDtoRequest.endDate == null){
-            throw InvalidRequestBodyException("Please add start and end date")
-        }
-        if(irrigationConfigurationDtoRequest.timesToWaterDuringInterval == null){
-            throw InvalidRequestBodyException("Please add how many times the land should be watered during the interval")
-        }
-        if(irrigationConfigurationDtoRequest.waterAmount == null){
-            throw InvalidRequestBodyException("Please add the water amount")
-        }
+        createIrrigationConfigurationValidation(irrigationConfigurationDtoRequest)
 
         val optionalLand: Optional<Land> = landRepository.findById(irrigationConfigurationDtoRequest.landId!!)
         val optionalSensor: Optional<Sensor> = sensorRepository.findById(irrigationConfigurationDtoRequest.sensorId!!)
-        if(optionalLand.isEmpty || optionalSensor.isEmpty){
-            throw InvalidRequestBodyException("No Land or Sensor was found for the given ID's")
+        if (optionalLand.isEmpty || optionalSensor.isEmpty) {
+            throw IdDoesNotExistException("No Land or Sensor was found for the given ID's")
         }
+        checkIrrigationConfigurationsSensors(
+            irrigationConfigurationDtoRequest.sensorId!!,
+            irrigationConfigurationDtoRequest.landId!!
+        )
+        checkIrrigationConfigurationsSensorsAndLandsCombinations(
+            irrigationConfigurationDtoRequest.sensorId!!,
+            irrigationConfigurationDtoRequest.landId!!,
+            irrigationConfigurationDtoRequest.startDate!!,
+            irrigationConfigurationDtoRequest.endDate!!
+        )
 
-        val irrigationConfiguration: IrrigationConfiguration = irrigationConfigurationMapper.mapDtoRequestToEntity(irrigationConfigurationDtoRequest)
-        irrigationConfiguration.land = optionalLand.get()
-        irrigationConfiguration.sensor = optionalSensor.get()
+        val irrigationConfigurationToBeSaved: IrrigationConfiguration =
+            irrigationConfigurationMapper.mapDtoRequestToEntity(irrigationConfigurationDtoRequest)
+        irrigationConfigurationToBeSaved.land = optionalLand.get()
+        irrigationConfigurationToBeSaved.sensor = optionalSensor.get()
 
-        savedIrrigationConfiguration = irrigationConfigurationRepository.save(irrigationConfiguration)
-        createIrrigationConfigurationHelper(savedIrrigationConfiguration)
-        return irrigationConfigurationMapper.mapEntityToDtoResponse(savedIrrigationConfiguration)
+        val savedIrrigationConfiguration: IrrigationConfiguration =
+            irrigationConfigurationRepository.save(createIrrigationConfigurationHelper(irrigationConfigurationToBeSaved))
+
+        val searchId: Long? = savedIrrigationConfiguration.id
+
+        val irrigationPeriodDtoResponseForIrrigationConfiguration: List<IrrigationPeriodDtoResponse> =
+            irrigationPeriodService.getAllIrrigationPeriodsForIrrigationConfigurationId(searchId!!)
+
+        val irrigationConfigurationDtoResponseToBeReturned: IrrigationConfigurationDtoResponse =
+            irrigationConfigurationMapper.mapEntityToDtoResponse(savedIrrigationConfiguration)
+
+        irrigationConfigurationDtoResponseToBeReturned.irrigationPeriodList =
+            irrigationPeriodDtoResponseForIrrigationConfiguration.toMutableList()
+        return irrigationConfigurationDtoResponseToBeReturned
+    }
+
+    private fun createIrrigationConfigurationValidation(irrigationConfigurationDtoRequest: IrrigationConfigurationDtoRequest) {
+        if (irrigationConfigurationDtoRequest.sensorId == null || irrigationConfigurationDtoRequest.landId == null) {
+            throw InvalidRequestBodyException("Please add land ID and sensor ID")
+        }
+        if (irrigationConfigurationDtoRequest.startDate == null || irrigationConfigurationDtoRequest.endDate == null) {
+            throw InvalidRequestBodyException("Please add start and end date")
+        }
+        if (irrigationConfigurationDtoRequest.timesToWaterDuringInterval == null) {
+            throw InvalidRequestBodyException("Please add how many times the land should be watered during the interval")
+        }
+        if (irrigationConfigurationDtoRequest.waterAmount == null) {
+            throw InvalidRequestBodyException("Please add the water amount")
+        }
+        if (irrigationConfigurationDtoRequest.startDate!! > irrigationConfigurationDtoRequest.endDate) {
+            throw InvalidRequestBodyException("Start date cannot be after end date")
+        }
+        if (irrigationConfigurationDtoRequest.startDate!! < LocalDateTime.now()) {
+            throw InvalidRequestBodyException("Start date cannot be in the past.")
+        }
+    }
+
+    // this function is to check if any sensor has any running configurations
+    private fun checkIrrigationConfigurationsSensors(
+        sensorId: Long,
+        landId: Long
+    ) {
+        val irrigationConfigurationList: List<IrrigationConfiguration> =
+            irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(sensorId, landId)
+        for (irrigationConfiguration: IrrigationConfiguration in irrigationConfigurationList) {
+            for (irrigationPeriod: IrrigationPeriod in irrigationConfiguration.irrigationPeriodList) {
+                if (!irrigationPeriod.isSuccessful) {
+                    throw InvalidRequestBodyException("Sensor could not be assigned to an another configuration since it still has a running configuration.")
+                }
+            }
+        }
+    }
+
+    //this functions check if the sensor has a running configuration, then we can create an another configuration if it has the same land and the date ranges do not intersect
+    private fun checkIrrigationConfigurationsSensorsAndLandsCombinations(
+        sensorId: Long,
+        landId: Long,
+        startDateToBeChecked: LocalDateTime,
+        endDateToBeChecked: LocalDateTime
+    ) {
+        val irrigationConfigurationList: List<IrrigationConfiguration> =
+            irrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(sensorId, landId)
+        for (irrigationConfiguration: IrrigationConfiguration in irrigationConfigurationList) {
+            if (!(endDateToBeChecked < irrigationConfiguration.startDate || startDateToBeChecked > irrigationConfiguration.endDate)) {
+                throw InvalidRequestBodyException("A configuration with the chosen date range cannot be created as it intersects with an already existing configuration")
+            }
+        }
+    }
+
+    //this function is to create the irrigation period based on the start date, end date and times to water during the interval
+    private fun createIrrigationConfigurationHelper(irrigationConfiguration: IrrigationConfiguration): IrrigationConfiguration {
+        val minutes: Long =
+            Duration.between(irrigationConfiguration.startDate, irrigationConfiguration.endDate).toMinutes()
+        val periodOfWateringInMinutes: Long =
+            (minutes / irrigationConfiguration.timesToWaterDuringInterval!! * 1.0).roundToLong()
+
+        var startTime: LocalDateTime? = irrigationConfiguration.startDate
+
+        for (i in 0 until irrigationConfiguration.timesToWaterDuringInterval!!) {
+            val irrigationPeriodDtoRequest = IrrigationPeriodDtoRequest(
+                startTime = startTime
+            )
+            if (startTime != null) {
+                startTime = startTime.plusMinutes(periodOfWateringInMinutes)
+            }
+            val mappedIrrigationPeriod: IrrigationPeriod =
+                irrigationPeriodMapper.mapDtoRequestToEntity(irrigationPeriodDtoRequest)
+            mappedIrrigationPeriod.irrigationConfiguration = irrigationConfiguration
+            irrigationPeriodService.createIrrigationPeriod(mappedIrrigationPeriod)
+        }
+        return irrigationConfiguration
     }
 
     override fun getAllIrrigationConfigurations(): List<IrrigationConfigurationDtoResponse> {
-        return irrigationConfigurationRepository.findAll().map { irrigationConfiguration -> irrigationConfigurationMapper.mapEntityToDtoResponse(irrigationConfiguration) }
+        return irrigationConfigurationRepository.findAll().map { irrigationConfiguration ->
+            irrigationConfigurationMapper.mapEntityToDtoResponse(irrigationConfiguration)
+        }
     }
 
     override fun getIrrigationConfigurationById(irrigationConfigurationId: Long): IrrigationConfigurationDtoResponse {
-        val optionalIrrigationConfiguration: Optional<IrrigationConfiguration> = irrigationConfigurationRepository.findById(irrigationConfigurationId)
-        if(optionalIrrigationConfiguration.isEmpty){
+        val optionalIrrigationConfiguration: Optional<IrrigationConfiguration> =
+            irrigationConfigurationRepository.findById(irrigationConfigurationId)
+        if (optionalIrrigationConfiguration.isEmpty) {
             throw IdDoesNotExistException("No irrigation configuration with the given ID was found")
         }
         return irrigationConfigurationMapper.mapEntityToDtoResponse(optionalIrrigationConfiguration.get())
     }
 
     override fun deleteIrrigationConfigurationById(irrigationConfigurationId: Long): String {
-        val optionalIrrigationConfiguration: Optional<IrrigationConfiguration> = irrigationConfigurationRepository.findById(irrigationConfigurationId)
-        if(optionalIrrigationConfiguration.isEmpty){
+        val optionalIrrigationConfiguration: Optional<IrrigationConfiguration> =
+            irrigationConfigurationRepository.findById(irrigationConfigurationId)
+        if (optionalIrrigationConfiguration.isEmpty) {
             throw IdDoesNotExistException("No irrigation configuration with the given ID was found")
         }
         irrigationConfigurationRepository.deleteById(irrigationConfigurationId)
         return "Irrigation configuration with ID $irrigationConfigurationId has been deleted"
     }
-
-
-    //this function is to create the irrigation period based on the start date, end date and times to water during the interval
-    fun createIrrigationConfigurationHelper(irrigationConfiguration: IrrigationConfiguration){
-
-        val minutes: Long = Duration.between(irrigationConfiguration.startDate, irrigationConfiguration.endDate).toMinutes()
-        val periodOfWateringInMinutes: Long = (minutes / irrigationConfiguration.timesToWaterDuringInterval!! * 1.0).roundToLong()
-
-        var startTime: LocalDateTime? = irrigationConfiguration.startDate
-
-        for(i in 0 until irrigationConfiguration.timesToWaterDuringInterval!!){
-            val irrigationPeriod = IrrigationPeriod(
-                startTime = startTime,
-                irrigationConfiguration = irrigationConfiguration
-            )
-            if (startTime != null) {
-                startTime = startTime.plusMinutes(periodOfWateringInMinutes)
-            }
-            irrigationConfiguration.addIrrigationPeriod(irrigationPeriodService.createIrrigationPeriod(irrigationPeriod))
-        }
-
-
-
-
-    }
-
 }

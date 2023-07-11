@@ -12,4 +12,6 @@ interface IIrrigationPeriodService {
     fun createIrrigationPeriod(irrigationPeriod: IrrigationPeriod): IrrigationPeriod
 
     fun scheduledTaskForSensorOperation()
+
+    fun getAllIrrigationPeriodsForIrrigationConfigurationId(irrigationConfigurationId: Long): List<IrrigationPeriodDtoResponse>
 }

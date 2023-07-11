@@ -1,5 +1,6 @@
 package com.irrigationsystem.mapper
 
+import com.irrigationsystem.dto.IrrigationPeriodDtoRequest
 import com.irrigationsystem.dto.IrrigationPeriodDtoResponse
 import com.irrigationsystem.entity.IrrigationPeriod
 
@@ -11,6 +12,14 @@ class IrrigationPeriodMapper {
             startTime = irrigationPeriod.startTime,
             endTime = irrigationPeriod.endTime,
             isSuccessful = irrigationPeriod.isSuccessful
+        )
+    }
+
+    fun mapDtoRequestToEntity(irrigationPeriodDtoRequest: IrrigationPeriodDtoRequest): IrrigationPeriod{
+        return IrrigationPeriod(
+            startTime = irrigationPeriodDtoRequest.startTime,
+            endTime = irrigationPeriodDtoRequest.endTime,
+            isSuccessful = irrigationPeriodDtoRequest.isSuccessful
         )
     }
 

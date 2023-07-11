@@ -17,4 +17,5 @@ interface IIrrigationConfigurationService {
     fun getIrrigationConfigurationById(irrigationConfigurationId: Long): IrrigationConfigurationDtoResponse
 
     fun deleteIrrigationConfigurationById(irrigationConfigurationId: Long): String
+
 }

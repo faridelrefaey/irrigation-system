@@ -33,7 +33,7 @@ class IrrigationPeriodService(
         val sensorRetryAttempts: Int = Integer.parseInt(sensorRetryAttemptsString)
         val irrigationPeriodsWithIsSuccessfulFalseList: MutableList<IrrigationPeriod> = irrigationPeriodRepository.getAllIrrigationPeriodWithIsSuccessfulFalse().toMutableList()
 
-        //looping over all irrigation periods with is successful fals
+        //looping over all irrigation periods with is successful false
         for(irrigationPeriod in irrigationPeriodsWithIsSuccessfulFalseList){
             //checking that the irrigation period start time has passed
             if(irrigationPeriod.startTime?.compareTo(LocalDateTime.now())!! < 1) {
@@ -66,6 +66,10 @@ class IrrigationPeriodService(
             }
         }
 
+    }
+
+    override fun getAllIrrigationPeriodsForIrrigationConfigurationId(irrigationConfigurationId: Long): List<IrrigationPeriodDtoResponse> {
+        return irrigationPeriodRepository.getAllIrrigationPeriodsForIrrigationConfigurationId(irrigationConfigurationId).map { irrigationPeriod -> irrigationPeriodMapper.mapEntityToDtoResponse(irrigationPeriod) }
     }
 
 

@@ -1,14 +1,6 @@
 package com.irrigationsystem.entity
 
-import jakarta.persistence.CascadeType
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
-import jakarta.persistence.OneToOne
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
@@ -23,15 +15,10 @@ data class IrrigationConfiguration(
     @ManyToOne
     @JoinColumn(name = "land_id")
     var land: Land? = null,
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sensor_id")
     var sensor: Sensor? = null,
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "irrigationConfiguration")
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "irrigationConfiguration", fetch = FetchType.EAGER)
     var irrigationPeriodList: MutableList<IrrigationPeriod> = mutableListOf()
 
 )
-{
-    fun addIrrigationPeriod(irrigationPeriod: IrrigationPeriod){
-        irrigationPeriodList.add(irrigationPeriod)
-    }
-}

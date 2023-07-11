@@ -1,31 +1,3 @@
-Land table will contain:
-    - id
-    - seed type
-    - land name
-    - area
-    - irrigation configuration(one to many)
-
-Irrigation configuration table will contain:
-    - id
-    - start date
-    - end date
-    - times to water during interval
-    - water amount
-    - land(many to one)
-    - sensor(one to one)
-    - irrigation period(one to many)
-
-Irrigation period table will contain:
-    - id
-    - start time
-    - end time
-    - is successful(to check if this period wen through or not)
-
-Sensor table will contain:
-    - id
-    - sensor name
-
-
 Steps:
 1- User will create land
 2- User will create sensors
