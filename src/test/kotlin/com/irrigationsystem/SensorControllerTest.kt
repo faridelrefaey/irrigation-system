@@ -56,7 +56,6 @@ class SensorControllerTest(
         sensorService.createSensor(sensorDtoRequest1)
         sensorService.createSensor(sensorDtoRequest2)
 
-        println(sensorService.getAllSensors())
         mockMvc.perform(MockMvcRequestBuilders.get("/sensor"))
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
