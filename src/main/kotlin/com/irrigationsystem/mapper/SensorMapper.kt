@@ -18,11 +18,4 @@ class SensorMapper {
             sensorName = sensor.sensorName
         )
     }
-
-//    fun mapDtoResponseToEntity(sensorDtoResponse: SensorDtoResponse): Sensor{
-//        return Sensor(
-//            id = sensorDtoResponse.id,
-//            sensorName = sensorDtoResponse.sensorName
-//        )
-//    }
 }

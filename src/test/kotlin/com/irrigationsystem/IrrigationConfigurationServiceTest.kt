@@ -8,6 +8,8 @@ import com.irrigationsystem.entity.Land
 import com.irrigationsystem.entity.Sensor
 import com.irrigationsystem.exceptions.IdDoesNotExistException
 import com.irrigationsystem.exceptions.InvalidRequestBodyException
+import com.irrigationsystem.exceptions.InvalidSensorException
+import com.irrigationsystem.exceptions.InvalidTimeException
 import com.irrigationsystem.mapper.IrrigationConfigurationMapper
 import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
@@ -45,12 +47,8 @@ class IrrigationConfigurationServiceTest {
     private lateinit var irrigationPeriodService: IrrigationPeriodService
     private lateinit var irrigationConfigurationService: IrrigationConfigurationService
     private lateinit var irrigationConfigurationDtoRequestToBeUsed1: IrrigationConfigurationDtoRequest
-    private lateinit var irrigationConfigurationDtoRequestToBeUsed2: IrrigationConfigurationDtoRequest
     private lateinit var landForMocking: Land
     private lateinit var sensorForMocking: Sensor
-    private lateinit var irrigationPeriodDtoRequestToBeUsed1: IrrigationPeriodDtoRequest
-    private lateinit var irrigationPeriodDtoRequestToBeUsed2: IrrigationPeriodDtoRequest
-    private lateinit var irrigationPeriodDtoRequestToBeUsed3: IrrigationPeriodDtoRequest
     private lateinit var irrigationConfigurationMapper: IrrigationConfigurationMapper
     private lateinit var irrigationPeriodMapper: IrrigationPeriodMapper
 
@@ -68,23 +66,6 @@ class IrrigationConfigurationServiceTest {
             landId = 1,
             sensorId = 1
         )
-
-        irrigationConfigurationDtoRequestToBeUsed2 = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-07-07T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-07-08T15:00:00.0"),
-            timesToWaterDuringInterval = 3,
-            waterAmount = 25.0,
-            landId = 1,
-            sensorId = 1
-        )
-
-
-
-        irrigationPeriodDtoRequestToBeUsed1 = IrrigationPeriodDtoRequest(startTime = LocalDateTime.parse("2023-07-07T00:00:00"))
-
-        irrigationPeriodDtoRequestToBeUsed2 = IrrigationPeriodDtoRequest(startTime = LocalDateTime.parse("2023-07-07T13:00:00"))
-
-        irrigationPeriodDtoRequestToBeUsed3 = IrrigationPeriodDtoRequest(startTime = LocalDateTime.parse("2023-07-08T02:00:00"))
 
         irrigationConfigurationMapper = IrrigationConfigurationMapper()
 
@@ -228,7 +209,7 @@ class IrrigationConfigurationServiceTest {
             landId = 1,
             sensorId = 1
         )
-        assertThrows<InvalidRequestBodyException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest1) }
+        assertThrows<InvalidTimeException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest1) }
     }
 
     @Test
@@ -242,7 +223,7 @@ class IrrigationConfigurationServiceTest {
             sensorId = 1
         )
 
-        assertThrows<InvalidRequestBodyException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest1) }
+        assertThrows<InvalidTimeException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest1) }
     }
 
     @Test
@@ -282,7 +263,7 @@ class IrrigationConfigurationServiceTest {
         every { landRepository.findById(1L) } returns Optional.of(landForMocking)
         every { sensorRepository.findById(1L) } returns Optional.of(sensorForMocking)
         every { irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf(irrigationConfigurationExpected)
-        assertThrows<InvalidRequestBodyException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequestToBeUsed1) }
+        assertThrows<InvalidSensorException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequestToBeUsed1) }
     }
 
     @Test
@@ -290,7 +271,6 @@ class IrrigationConfigurationServiceTest {
         val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2023-08-01T00:00:00"))
         val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2023-08-02T13:00:00"))
         val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2023-08-04T02:00:00"))
-        val land: Land = Land(id = 2L, seedType = "a", landName = "a", area = 12.5)
         val irrigationConfigurationExpected = IrrigationConfiguration(
             id = 1,
             startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
@@ -315,7 +295,7 @@ class IrrigationConfigurationServiceTest {
         every { sensorRepository.findById(1L) } returns Optional.of(sensorForMocking)
         every { irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf()
         every { irrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(1L, 1L) } returns listOf(irrigationConfigurationExpected)
-        assertThrows<InvalidRequestBodyException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest) }
+        assertThrows<InvalidSensorException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest) }
     }
 
     @Test

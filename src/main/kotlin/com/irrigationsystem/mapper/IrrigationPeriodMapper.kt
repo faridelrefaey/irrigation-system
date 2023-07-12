@@ -22,5 +22,4 @@ class IrrigationPeriodMapper {
             isSuccessful = irrigationPeriodDtoRequest.isSuccessful
         )
     }
-
 }

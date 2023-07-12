@@ -18,12 +18,10 @@ import java.util.*
 @Service
 @Transactional
 class LandService(
-    @Autowired private val landRepository: ILandRepository,
-    @Autowired private val sensorService: ISensorService
-): ILandService {
+    @Autowired private val landRepository: ILandRepository
+) : ILandService {
 
     private val landMapper = LandMapper()
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
     override fun createLand(landDtoRequest: LandDtoRequest): LandDtoResponse {
         val landToBeSaved: Land = landMapper.mapDtoRequestToEntity(landDtoRequest)
@@ -34,22 +32,22 @@ class LandService(
 
     override fun editLand(landId: Long, landDtoRequest: LandDtoRequest?): LandDtoResponse {
         val optionalLand: Optional<Land> = landRepository.findById(landId)
-        if(optionalLand.isEmpty){
+        if (optionalLand.isEmpty) {
             throw IdDoesNotExistException("No land with the given ID was found.")
         }
 
-        if(landDtoRequest == null){
+        if (landDtoRequest == null) {
             throw InvalidRequestBodyException("Please add a land request body")
         }
 
         val land: Land = optionalLand.get()
-        if(landDtoRequest.landName != null) {
+        if (landDtoRequest.landName != null) {
             land.landName = landDtoRequest.landName
         }
-        if(landDtoRequest.area != null) {
+        if (landDtoRequest.area != null) {
             land.area = landDtoRequest.area
         }
-        if(landDtoRequest.seedType != null){
+        if (landDtoRequest.seedType != null) {
             land.seedType = landDtoRequest.seedType
         }
 
@@ -64,7 +62,7 @@ class LandService(
 
     override fun getLandById(landId: Long): LandDtoResponse {
         val optionalLand: Optional<Land> = landRepository.findById(landId)
-        if(optionalLand.isEmpty){
+        if (optionalLand.isEmpty) {
             throw IdDoesNotExistException("No land with the given ID was found.")
         }
 
@@ -73,7 +71,7 @@ class LandService(
 
     override fun deleteLandById(landId: Long): String {
         val optionalLand: Optional<Land> = landRepository.findById(landId)
-        if(optionalLand.isEmpty){
+        if (optionalLand.isEmpty) {
             throw IdDoesNotExistException("No land with the given ID was found.")
         }
 

@@ -10,6 +10,8 @@ import com.irrigationsystem.entity.Land
 import com.irrigationsystem.entity.Sensor
 import com.irrigationsystem.exceptions.IdDoesNotExistException
 import com.irrigationsystem.exceptions.InvalidRequestBodyException
+import com.irrigationsystem.exceptions.InvalidSensorException
+import com.irrigationsystem.exceptions.InvalidTimeException
 import com.irrigationsystem.mapper.IrrigationConfigurationMapper
 import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
@@ -91,10 +93,10 @@ class IrrigationConfigurationService(
             throw InvalidRequestBodyException("Please add the water amount")
         }
         if (irrigationConfigurationDtoRequest.startDate!! > irrigationConfigurationDtoRequest.endDate) {
-            throw InvalidRequestBodyException("Start date cannot be after end date")
+            throw InvalidTimeException("Start date cannot be after end date")
         }
         if (irrigationConfigurationDtoRequest.startDate!! < LocalDateTime.now()) {
-            throw InvalidRequestBodyException("Start date cannot be in the past.")
+            throw InvalidTimeException("Start date cannot be in the past.")
         }
     }
 
@@ -108,13 +110,13 @@ class IrrigationConfigurationService(
         for (irrigationConfiguration: IrrigationConfiguration in irrigationConfigurationList) {
             for (irrigationPeriod: IrrigationPeriod in irrigationConfiguration.irrigationPeriodList) {
                 if (!irrigationPeriod.isSuccessful) {
-                    throw InvalidRequestBodyException("Sensor could not be assigned to an another configuration since it still has a running configuration.")
+                    throw InvalidSensorException("Sensor could not be assigned to an another configuration since it still has a running configuration.")
                 }
             }
         }
     }
 
-    //this functions check if the sensor has a running configuration, then we can create an another configuration if it has the same land and the date ranges do not intersect
+    //this function checks if the sensor has a running configuration, then we can create an another configuration if it has the same land and the date ranges do not intersect
     private fun checkIrrigationConfigurationsSensorsAndLandsCombinations(
         sensorId: Long,
         landId: Long,
@@ -125,7 +127,7 @@ class IrrigationConfigurationService(
             irrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(sensorId, landId)
         for (irrigationConfiguration: IrrigationConfiguration in irrigationConfigurationList) {
             if (!(endDateToBeChecked < irrigationConfiguration.startDate || startDateToBeChecked > irrigationConfiguration.endDate)) {
-                throw InvalidRequestBodyException("A configuration with the chosen date range cannot be created as it intersects with an already existing configuration")
+                throw InvalidSensorException("A configuration with the chosen date range cannot be created as it intersects with an already existing configuration")
             }
         }
     }
@@ -137,15 +139,13 @@ class IrrigationConfigurationService(
         val periodOfWateringInMinutes: Long =
             (minutes / irrigationConfiguration.timesToWaterDuringInterval!! * 1.0).roundToLong()
 
-        var startTime: LocalDateTime? = irrigationConfiguration.startDate
+        var startTime: LocalDateTime = irrigationConfiguration.startDate!!
 
         for (i in 0 until irrigationConfiguration.timesToWaterDuringInterval!!) {
             val irrigationPeriodDtoRequest = IrrigationPeriodDtoRequest(
                 startTime = startTime
             )
-            if (startTime != null) {
-                startTime = startTime.plusMinutes(periodOfWateringInMinutes)
-            }
+            startTime = startTime.plusMinutes(periodOfWateringInMinutes)
             val mappedIrrigationPeriod: IrrigationPeriod =
                 irrigationPeriodMapper.mapDtoRequestToEntity(irrigationPeriodDtoRequest)
             mappedIrrigationPeriod.irrigationConfiguration = irrigationConfiguration

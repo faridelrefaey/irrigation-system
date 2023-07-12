@@ -29,8 +29,6 @@ class IrrigationPeriodServiceTest {
     private lateinit var sensorService: ISensorService
     private lateinit var irrigationPeriodService: IrrigationPeriodService
     private lateinit var irrigationPeriod: IrrigationPeriod
-    private lateinit var landForMocking: Land
-    private lateinit var sensorForMocking: Sensor
     private lateinit var irrigationPeriodMapper: IrrigationPeriodMapper
 
 
@@ -39,8 +37,6 @@ class IrrigationPeriodServiceTest {
         MockKAnnotations.init(this)
         irrigationPeriodService = IrrigationPeriodService(irrigationPeriodRepository, sensorService)
         irrigationPeriod = IrrigationPeriod(startTime = LocalDateTime.parse("2023-08-01T00:00:00"))
-        landForMocking = Land(id = 1, seedType = "Corn", landName = "Corn Field", area = 12.5, irrigationConfigurationList = mutableListOf())
-        sensorForMocking = Sensor(id = 1, sensorName = "Sensor1")
         irrigationPeriodMapper = IrrigationPeriodMapper()
     }
 

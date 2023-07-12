@@ -15,7 +15,7 @@ class ExceptionHandler {
     }
 
     @ExceptionHandler
-    fun handleTimeInvalidException(ex: TimeInvalidException): ResponseEntity<ErrorMessageModel>{
+    fun handleInvalidTimeException(ex: InvalidTimeException): ResponseEntity<ErrorMessageModel>{
         val error = ErrorMessageModel(httpStatus = HttpStatus.BAD_REQUEST, status = HttpStatus.BAD_REQUEST.value(), message = ex.message)
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }

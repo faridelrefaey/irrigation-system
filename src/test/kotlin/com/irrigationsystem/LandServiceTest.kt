@@ -29,11 +29,8 @@ class LandServiceTest {
 
     @MockK
     private lateinit var landRepository: ILandRepository
-    @MockK
-    private lateinit var sensorService: ISensorService
     private lateinit var landService: LandService
     private lateinit var landDtoRequestToBeUsed1: LandDtoRequest
-    private lateinit var landDtoRequestToBeUsed2: LandDtoRequest
     private lateinit var landForMocking: Land
     private lateinit var landMapper: LandMapper
 
@@ -41,16 +38,15 @@ class LandServiceTest {
     @BeforeEach
     fun setUp(){
         MockKAnnotations.init(this)
-        landService = LandService(landRepository, sensorService)
+        landService = LandService(landRepository)
         landDtoRequestToBeUsed1 = LandDtoRequest(seedType = "Corn", landName = "Corn Field", area = 12.5)
-        landDtoRequestToBeUsed2 = LandDtoRequest(seedType = "Wheat", landName = "Wheat Field", area = 25.0)
         landForMocking = Land(id = 1, seedType = "Corn", landName = "Corn Field", area = 12.5, irrigationConfigurationList = mutableListOf())
         landMapper = LandMapper()
     }
 
     @AfterEach
     fun tearDown(){
-        clearMocks(landRepository, sensorService)
+        clearMocks(landRepository)
     }
 
     @Test

@@ -26,14 +26,4 @@ class LandMapper {
             seedType = landDtoRequest.seedType
         )
     }
-
-//    fun mapDtoResponseToEntity(landDtoResponse: LandDtoResponse): Land{
-//        return Land(
-//            id = landDtoResponse.id,
-//            landName = landDtoResponse.landName,
-//            area = landDtoResponse.area,
-//            seedType = landDtoResponse.seedType,
-//            irrigationConfigurationList = landDtoResponse.irrigationConfigurationList.map { irrigationConfigurationDtoResponse ->  }
-//        )
-//    }
 }
