@@ -1,7 +1,6 @@
 package com.irrigationsystem
 
 import com.irrigationsystem.dto.IrrigationConfigurationDtoRequest
-import com.irrigationsystem.dto.IrrigationPeriodDtoRequest
 import com.irrigationsystem.entity.IrrigationConfiguration
 import com.irrigationsystem.entity.IrrigationPeriod
 import com.irrigationsystem.entity.Land
@@ -14,8 +13,7 @@ import com.irrigationsystem.mapper.IrrigationConfigurationMapper
 import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
 import com.irrigationsystem.repository.ISensorRepository
-import com.irrigationsystem.repository.IrrigationConfigurationRepository
-import com.irrigationsystem.service.ISensorService
+import com.irrigationsystem.repository.IIrrigationConfigurationRepository
 import com.irrigationsystem.service.IrrigationConfigurationService
 import com.irrigationsystem.service.IrrigationPeriodService
 import io.mockk.MockKAnnotations
@@ -28,7 +26,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.TestPropertySource
 import java.time.LocalDateTime
 import java.util.*
@@ -38,7 +35,7 @@ import java.util.*
 class IrrigationConfigurationServiceTest {
 
     @MockK
-    private lateinit var irrigationConfigurationRepository: IrrigationConfigurationRepository
+    private lateinit var IIrrigationConfigurationRepository: IIrrigationConfigurationRepository
     @MockK
     private lateinit var landRepository: ILandRepository
     @MockK
@@ -55,7 +52,7 @@ class IrrigationConfigurationServiceTest {
     @BeforeEach
     fun setUp(){
         MockKAnnotations.init(this)
-        irrigationConfigurationService = IrrigationConfigurationService(irrigationConfigurationRepository, landRepository, sensorRepository, irrigationPeriodService)
+        irrigationConfigurationService = IrrigationConfigurationService(IIrrigationConfigurationRepository, landRepository, sensorRepository, irrigationPeriodService)
         landForMocking = Land(id = 1, seedType = "Corn", landName = "Corn Field", area = 12.5, irrigationConfigurationList = mutableListOf())
         sensorForMocking = Sensor(id = 1, sensorName = "Sensor1")
         irrigationConfigurationDtoRequestToBeUsed1 = IrrigationConfigurationDtoRequest(
@@ -74,7 +71,7 @@ class IrrigationConfigurationServiceTest {
 
     @AfterEach
     fun tearDown(){
-        clearMocks(irrigationConfigurationRepository, landRepository, sensorRepository, irrigationPeriodService)
+        clearMocks(IIrrigationConfigurationRepository, landRepository, sensorRepository, irrigationPeriodService)
     }
 
 
@@ -110,12 +107,12 @@ class IrrigationConfigurationServiceTest {
 
         every { landRepository.findById(1L) } returns Optional.of(landForMocking)
         every { sensorRepository.findById(1L) } returns Optional.of(sensorForMocking)
-        every { irrigationConfigurationRepository.save(irrigationConfigurationToBeSaved) } returns irrigationConfigurationExpected
+        every { IIrrigationConfigurationRepository.save(irrigationConfigurationToBeSaved) } returns irrigationConfigurationExpected
         every { irrigationPeriodService.createIrrigationPeriod(irrigationPeriodToBeSaved1) } returns irrigationPeriodExpected1
         every { irrigationPeriodService.createIrrigationPeriod(irrigationPeriodToBeSaved2) } returns irrigationPeriodExpected2
         every { irrigationPeriodService.createIrrigationPeriod(irrigationPeriodToBeSaved3) } returns irrigationPeriodExpected3
-        every { irrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(1L, 1L) } returns listOf()
-        every { irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf()
+        every { IIrrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(1L, 1L) } returns listOf()
+        every { IIrrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf()
         every { irrigationPeriodService.getAllIrrigationPeriodsForIrrigationConfigurationId(1L) } returns listOf(irrigationPeriodExpected1, irrigationPeriodExpected2, irrigationPeriodExpected3).map { irrigationPeriod -> irrigationPeriodMapper.mapEntityToDtoResponse(irrigationPeriod) }
 
 
@@ -262,7 +259,7 @@ class IrrigationConfigurationServiceTest {
 
         every { landRepository.findById(1L) } returns Optional.of(landForMocking)
         every { sensorRepository.findById(1L) } returns Optional.of(sensorForMocking)
-        every { irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf(irrigationConfigurationExpected)
+        every { IIrrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf(irrigationConfigurationExpected)
         assertThrows<InvalidSensorException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequestToBeUsed1) }
     }
 
@@ -293,8 +290,8 @@ class IrrigationConfigurationServiceTest {
 
         every { landRepository.findById(1L) } returns Optional.of(landForMocking)
         every { sensorRepository.findById(1L) } returns Optional.of(sensorForMocking)
-        every { irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf()
-        every { irrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(1L, 1L) } returns listOf(irrigationConfigurationExpected)
+        every { IIrrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(1L, 1L) } returns listOf()
+        every { IIrrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(1L, 1L) } returns listOf(irrigationConfigurationExpected)
         assertThrows<InvalidSensorException> { irrigationConfigurationService.createIrrigationConfiguration(irrigationConfigurationDtoRequest) }
     }
 
@@ -320,7 +317,7 @@ class IrrigationConfigurationServiceTest {
             sensor = sensorForMocking
         )
 
-        every { irrigationConfigurationRepository.findAll() } returns listOf(irrigationConfigurationExpected1, irrigationConfigurationExpected2)
+        every { IIrrigationConfigurationRepository.findAll() } returns listOf(irrigationConfigurationExpected1, irrigationConfigurationExpected2)
         assertEquals(listOf(irrigationConfigurationExpected1, irrigationConfigurationExpected2).map { irrigationConfiguration -> irrigationConfigurationMapper.mapEntityToDtoResponse(irrigationConfiguration) }, irrigationConfigurationService.getAllIrrigationConfigurations())
     }
 
@@ -336,13 +333,13 @@ class IrrigationConfigurationServiceTest {
             sensor = sensorForMocking
         )
 
-        every { irrigationConfigurationRepository.findById(1L) } returns Optional.of(irrigationConfigurationExpected)
+        every { IIrrigationConfigurationRepository.findById(1L) } returns Optional.of(irrigationConfigurationExpected)
         assertEquals(irrigationConfigurationMapper.mapEntityToDtoResponse(irrigationConfigurationExpected), irrigationConfigurationService.getIrrigationConfigurationById(1L))
     }
 
     @Test
     fun testGetIrrigationConfigurationByInvalidId(){
-        every { irrigationConfigurationRepository.findById(2L) } returns Optional.empty()
+        every { IIrrigationConfigurationRepository.findById(2L) } returns Optional.empty()
         assertThrows<IdDoesNotExistException> { irrigationConfigurationService.getIrrigationConfigurationById(2L) }
     }
 
@@ -358,14 +355,14 @@ class IrrigationConfigurationServiceTest {
             sensor = sensorForMocking
         )
 
-        every { irrigationConfigurationRepository.findById(1L) } returns Optional.of(irrigationConfigurationExpected)
-        every { irrigationConfigurationRepository.deleteById(1L) } returns Unit
+        every { IIrrigationConfigurationRepository.findById(1L) } returns Optional.of(irrigationConfigurationExpected)
+        every { IIrrigationConfigurationRepository.deleteById(1L) } returns Unit
         assertEquals("Irrigation configuration with ID 1 has been deleted", irrigationConfigurationService.deleteIrrigationConfigurationById(1L))
     }
 
     @Test
     fun testDeleteIrrigationConfigurationByInvalidId(){
-        every { irrigationConfigurationRepository.findById(2L) } returns Optional.empty()
+        every { IIrrigationConfigurationRepository.findById(2L) } returns Optional.empty()
         assertThrows<IdDoesNotExistException> { irrigationConfigurationService.deleteIrrigationConfigurationById(2L) }
 
     }

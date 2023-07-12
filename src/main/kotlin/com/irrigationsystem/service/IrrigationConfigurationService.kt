@@ -16,23 +16,22 @@ import com.irrigationsystem.mapper.IrrigationConfigurationMapper
 import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
 import com.irrigationsystem.repository.ISensorRepository
-import com.irrigationsystem.repository.IrrigationConfigurationRepository
+import com.irrigationsystem.repository.IIrrigationConfigurationRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.Optional
-import javax.swing.text.html.Option
 import kotlin.math.roundToLong
 
 @Service
 @Transactional
 class IrrigationConfigurationService(
-    @Autowired private val irrigationConfigurationRepository: IrrigationConfigurationRepository,
+    @Autowired private val IIrrigationConfigurationRepository: IIrrigationConfigurationRepository,
     @Autowired private val landRepository: ILandRepository,
     @Autowired private val sensorRepository: ISensorRepository,
-    @Autowired private val irrigationPeriodService: IrrigationPeriodService
+    @Autowired private val irrigationPeriodService: IIrrigationPeriodService
 ) : IIrrigationConfigurationService {
 
     private val irrigationConfigurationMapper = IrrigationConfigurationMapper()
@@ -64,7 +63,7 @@ class IrrigationConfigurationService(
         irrigationConfigurationToBeSaved.sensor = optionalSensor.get()
 
         val savedIrrigationConfiguration: IrrigationConfiguration =
-            irrigationConfigurationRepository.save(createIrrigationConfigurationHelper(irrigationConfigurationToBeSaved))
+            IIrrigationConfigurationRepository.save(createIrrigationConfigurationHelper(irrigationConfigurationToBeSaved))
 
         val searchId: Long? = savedIrrigationConfiguration.id
 
@@ -106,7 +105,7 @@ class IrrigationConfigurationService(
         landId: Long
     ) {
         val irrigationConfigurationList: List<IrrigationConfiguration> =
-            irrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(sensorId, landId)
+            IIrrigationConfigurationRepository.getAllIrrigationConfigurationsForSensorIdAndNotForLandId(sensorId, landId)
         for (irrigationConfiguration: IrrigationConfiguration in irrigationConfigurationList) {
             for (irrigationPeriod: IrrigationPeriod in irrigationConfiguration.irrigationPeriodList) {
                 if (!irrigationPeriod.isSuccessful) {
@@ -124,7 +123,7 @@ class IrrigationConfigurationService(
         endDateToBeChecked: LocalDateTime
     ) {
         val irrigationConfigurationList: List<IrrigationConfiguration> =
-            irrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(sensorId, landId)
+            IIrrigationConfigurationRepository.getAllIrrigationConfigurationForSensorIdAndLandId(sensorId, landId)
         for (irrigationConfiguration: IrrigationConfiguration in irrigationConfigurationList) {
             if (!(endDateToBeChecked < irrigationConfiguration.startDate || startDateToBeChecked > irrigationConfiguration.endDate)) {
                 throw InvalidSensorException("A configuration with the chosen date range cannot be created as it intersects with an already existing configuration")
@@ -155,14 +154,14 @@ class IrrigationConfigurationService(
     }
 
     override fun getAllIrrigationConfigurations(): List<IrrigationConfigurationDtoResponse> {
-        return irrigationConfigurationRepository.findAll().map { irrigationConfiguration ->
+        return IIrrigationConfigurationRepository.findAll().map { irrigationConfiguration ->
             irrigationConfigurationMapper.mapEntityToDtoResponse(irrigationConfiguration)
         }
     }
 
     override fun getIrrigationConfigurationById(irrigationConfigurationId: Long): IrrigationConfigurationDtoResponse {
         val optionalIrrigationConfiguration: Optional<IrrigationConfiguration> =
-            irrigationConfigurationRepository.findById(irrigationConfigurationId)
+            IIrrigationConfigurationRepository.findById(irrigationConfigurationId)
         if (optionalIrrigationConfiguration.isEmpty) {
             throw IdDoesNotExistException("No irrigation configuration with the given ID was found")
         }
@@ -171,11 +170,11 @@ class IrrigationConfigurationService(
 
     override fun deleteIrrigationConfigurationById(irrigationConfigurationId: Long): String {
         val optionalIrrigationConfiguration: Optional<IrrigationConfiguration> =
-            irrigationConfigurationRepository.findById(irrigationConfigurationId)
+            IIrrigationConfigurationRepository.findById(irrigationConfigurationId)
         if (optionalIrrigationConfiguration.isEmpty) {
             throw IdDoesNotExistException("No irrigation configuration with the given ID was found")
         }
-        irrigationConfigurationRepository.deleteById(irrigationConfigurationId)
+        IIrrigationConfigurationRepository.deleteById(irrigationConfigurationId)
         return "Irrigation configuration with ID $irrigationConfigurationId has been deleted"
     }
 }

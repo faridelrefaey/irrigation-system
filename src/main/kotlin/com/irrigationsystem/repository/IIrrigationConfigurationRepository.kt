@@ -6,11 +6,10 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
 
 @Repository
 @Transactional
-interface IrrigationConfigurationRepository: JpaRepository<IrrigationConfiguration, Long> {
+interface IIrrigationConfigurationRepository: JpaRepository<IrrigationConfiguration, Long> {
 
     @Query(value = "SELECT i FROM IrrigationConfiguration i WHERE i.sensor.id = :sensorId AND i.land.id != :landId")
     fun getAllIrrigationConfigurationsForSensorIdAndNotForLandId(@Param("sensorId") sensorId: Long, @Param("landId") landId: Long): List<IrrigationConfiguration>
