@@ -23,34 +23,34 @@ All the API's documentation could be found in the Swagger documentation "/swagge
 Request Body:  
 ```JSON
 {
-  "seedType": "string",
-  "landName": "string",
-  "area": 0
+  "seedType": "Corn",
+  "landName": "Corn Field",
+  "area": 12.5
 }
 ```
 Response:
 ```JSON
 {
-  "id": 0,
-  "seedType": "string",
-  "landName": "string",
-  "area": 0,
+  "id": 1,
+  "seedType": "Corn",
+  "landName": "Corn Field",
+  "area": 12.5,
   "irrigationConfigurationList": [
     {
-      "id": 0,
-      "startDate": "2023-07-11T15:16:11.268Z",
-      "endDate": "2023-07-11T15:16:11.268Z",
-      "timesToWaterDuringInterval": 0,
-      "waterAmount": 0,
+      "id": 1,
+      "startDate": "2023-07-11T15:16:11.268",
+      "endDate": "2023-07-11T15:16:11.268",
+      "timesToWaterDuringInterval": 3,
+      "waterAmount": 10.75,
       "sensor": {
-        "id": 0,
-        "sensorName": "string"
+        "id": 1,
+        "sensorName": "Sensor1"
       },
       "irrigationPeriodList": [
         {
-          "id": 0,
-          "startTime": "2023-07-11T15:16:11.268Z",
-          "endTime": "2023-07-11T15:16:11.268Z",
+          "id": 1,
+          "startTime": "2023-07-11T15:16:11.268",
+          "endTime": "2023-07-11T15:16:11.268",
           "isSuccessful": true
         }
       ]
@@ -64,26 +64,26 @@ Response:
 Response:
 ```JSON
 {
-  "id": 0,
-  "seedType": "string",
-  "landName": "string",
-  "area": 0,
+  "id": 1,
+  "seedType": "Corn",
+  "landName": "Corn Field",
+  "area": 12.5,
   "irrigationConfigurationList": [
     {
-      "id": 0,
-      "startDate": "2023-07-11T15:29:35.583Z",
-      "endDate": "2023-07-11T15:29:35.583Z",
-      "timesToWaterDuringInterval": 0,
-      "waterAmount": 0,
+      "id": 1,
+      "startDate": "2023-07-11T15:16:11.268",
+      "endDate": "2023-07-11T15:16:11.268",
+      "timesToWaterDuringInterval": 3,
+      "waterAmount": 10.75,
       "sensor": {
-        "id": 0,
-        "sensorName": "string"
+        "id": 1,
+        "sensorName": "Sensor1"
       },
       "irrigationPeriodList": [
         {
-          "id": 0,
-          "startTime": "2023-07-11T15:29:35.583Z",
-          "endTime": "2023-07-11T15:29:35.583Z",
+          "id": 1,
+          "startTime": "2023-07-11T15:16:11.268",
+          "endTime": "2023-07-11T15:16:11.268",
           "isSuccessful": true
         }
       ]
@@ -97,35 +97,35 @@ Response:
 Request Body:
 ```JSON
 {
-  "seedType": "string",
-  "landName": "string",
-  "area": 0
+  "seedType": "Wheat",
+  "landName": "Wheat Field",
+  "area": 25.5
 }
 ```
 
 Response:
 ```JSON
 {
-  "id": 0,
-  "seedType": "string",
-  "landName": "string",
-  "area": 0,
+  "id": 1,
+  "seedType": "Wheat",
+  "landName": "Wheat Field",
+  "area": 25.5,
   "irrigationConfigurationList": [
     {
-      "id": 0,
-      "startDate": "2023-07-11T15:30:56.330Z",
-      "endDate": "2023-07-11T15:30:56.330Z",
-      "timesToWaterDuringInterval": 0,
-      "waterAmount": 0,
+      "id": 1,
+      "startDate": "2023-07-11T15:30:56.330",
+      "endDate": "2023-07-11T15:30:56.330",
+      "timesToWaterDuringInterval": 4,
+      "waterAmount": 15,
       "sensor": {
-        "id": 0,
-        "sensorName": "string"
+        "id": 1,
+        "sensorName": "Sensor1"
       },
       "irrigationPeriodList": [
         {
-          "id": 0,
-          "startTime": "2023-07-11T15:30:56.330Z",
-          "endTime": "2023-07-11T15:30:56.330Z",
+          "id": 1,
+          "startTime": "2023-07-11T15:30:56.3301",
+          "endTime": "2023-07-11T15:30:56.3301",
           "isSuccessful": true
         }
       ]
@@ -147,26 +147,26 @@ Response:
 ```JSON
 [
   {
-    "id": 0,
-    "seedType": "string",
-    "landName": "string",
-    "area": 0,
+    "id": 1,
+    "seedType": "Corn",
+    "landName": "Corn Field",
+    "area": 15.0,
     "irrigationConfigurationList": [
       {
-        "id": 0,
-        "startDate": "2023-07-11T15:34:41.455Z",
-        "endDate": "2023-07-11T15:34:41.455Z",
-        "timesToWaterDuringInterval": 0,
-        "waterAmount": 0,
+        "id": 1,
+        "startDate": "2023-07-11T15:34:41.455",
+        "endDate": "2023-07-11T15:34:41.455",
+        "timesToWaterDuringInterval": 5,
+        "waterAmount": 13.0,
         "sensor": {
-          "id": 0,
-          "sensorName": "string"
+          "id": 1,
+          "sensorName": "Sensor1"
         },
         "irrigationPeriodList": [
           {
-            "id": 0,
-            "startTime": "2023-07-11T15:34:41.455Z",
-            "endTime": "2023-07-11T15:34:41.455Z",
+            "id": 1,
+            "startTime": "2023-07-11T15:34:41.455",
+            "endTime": "2023-07-11T15:34:41.455",
             "isSuccessful": true
           }
         ]
@@ -183,8 +183,8 @@ Response:
 Response:
 ```JSON
 {
-  "id": 0,
-  "sensorName": "string"
+  "id": 1,
+  "sensorName": "Sensor1"
 }
 ```
 
@@ -193,15 +193,15 @@ Response:
 Request Body:
 ```JSON
 {
-  "sensorName": "string"
+  "sensorName": "Sensor2"
 }
 ```
 
 Response:
 ```JSON
 {
-  "id": 0,
-  "sensorName": "string"
+  "id": 1,
+  "sensorName": "Sensor2"
 }
 ```
 
@@ -211,8 +211,8 @@ Response:
 ```JSON
 [
   {
-    "id": 0,
-    "sensorName": "string"
+    "id": 1,
+    "sensorName": "Sensor1"
   }
 ]
 ```
@@ -222,15 +222,15 @@ Response:
 Request Body:
 ```JSON
 {
-  "sensorName": "string"
+  "sensorName": "Sensor1"
 }
 ```
 
 Response:
 ```JSON
 {
-  "id": 0,
-  "sensorName": "string"
+  "id": 1,
+  "sensorName": "Sensor1"
 }
 ```
 
@@ -242,20 +242,20 @@ Response:
 ```JSON
 [
   {
-    "id": 0,
-    "startDate": "2023-07-11T15:41:51.085Z",
-    "endDate": "2023-07-11T15:41:51.085Z",
-    "timesToWaterDuringInterval": 0,
-    "waterAmount": 0,
+    "id": 1,
+    "startDate": "2023-07-11T15:41:51.085",
+    "endDate": "2023-07-11T15:41:51.085",
+    "timesToWaterDuringInterval": 4,
+    "waterAmount": 12.5,
     "sensor": {
-      "id": 0,
-      "sensorName": "string"
+      "id": 1,
+      "sensorName": "Sensor1"
     },
     "irrigationPeriodList": [
       {
-        "id": 0,
-        "startTime": "2023-07-11T15:41:51.085Z",
-        "endTime": "2023-07-11T15:41:51.085Z",
+        "id": 1,
+        "startTime": "2023-07-11T15:41:51.085",
+        "endTime": "2023-07-11T15:41:51.085",
         "isSuccessful": true
       }
     ]
@@ -268,32 +268,32 @@ Response:
 Request Body:
 ```JSON
 {
-  "startDate": "2023-07-11T15:42:41.092Z",
-  "endDate": "2023-07-11T15:42:41.092Z",
-  "timesToWaterDuringInterval": 0,
-  "waterAmount": 0,
-  "landId": 0,
-  "sensorId": 0
+  "startDate": "2023-07-11T15:42:41.092",
+  "endDate": "2023-07-11T15:42:41.092",
+  "timesToWaterDuringInterval": 3,
+  "waterAmount": 12.4,
+  "landId": 1,
+  "sensorId": 1
 }
 ```
 
 Response:
 ```JSON
 {
-  "id": 0,
-  "startDate": "2023-07-11T15:42:41.093Z",
-  "endDate": "2023-07-11T15:42:41.093Z",
-  "timesToWaterDuringInterval": 0,
-  "waterAmount": 0,
+  "id": 1,
+  "startDate": "2023-07-11T15:42:41.093",
+  "endDate": "2023-07-11T15:42:41.093",
+  "timesToWaterDuringInterval": 3,
+  "waterAmount": 12.4,
   "sensor": {
-    "id": 0,
-    "sensorName": "string"
+    "id": 1,
+    "sensorName": "Sensor1"
   },
   "irrigationPeriodList": [
     {
-      "id": 0,
-      "startTime": "2023-07-11T15:42:41.093Z",
-      "endTime": "2023-07-11T15:42:41.093Z",
+      "id": 1,
+      "startTime": "2023-07-11T15:42:41.093",
+      "endTime": "2023-07-11T15:42:41.093",
       "isSuccessful": true
     }
   ]
@@ -305,20 +305,20 @@ Response:
 Response:
 ```JSON
 {
-  "id": 0,
-  "startDate": "2023-07-11T15:43:30.089Z",
-  "endDate": "2023-07-11T15:43:30.089Z",
-  "timesToWaterDuringInterval": 0,
-  "waterAmount": 0,
+  "id": 1,
+  "startDate": "2023-07-11T15:43:30.089",
+  "endDate": "2023-07-11T15:43:30.089",
+  "timesToWaterDuringInterval": 4,
+  "waterAmount": 12.4,
   "sensor": {
-    "id": 0,
-    "sensorName": "string"
+    "id": 1,
+    "sensorName": "Sensor1"
   },
   "irrigationPeriodList": [
     {
-      "id": 0,
-      "startTime": "2023-07-11T15:43:30.089Z",
-      "endTime": "2023-07-11T15:43:30.089Z",
+      "id": 1,
+      "startTime": "2023-07-11T15:43:30.089",
+      "endTime": "2023-07-11T15:43:30.089",
       "isSuccessful": true
     }
   ]
