@@ -24,10 +24,13 @@ class LandService(
     private val landMapper = LandMapper()
 
     override fun createLand(landDtoRequest: LandDtoRequest): LandDtoResponse {
-        val landToBeSaved: Land = landMapper.mapDtoRequestToEntity(landDtoRequest)
-        val savedLand: Land = landRepository.save(landToBeSaved)
-
-        return landMapper.mapEntityToDtoResponse(savedLand)
+        return landMapper.mapEntityToDtoResponse(
+            landRepository.save(
+                landMapper.mapDtoRequestToEntity(
+                    landDtoRequest
+                )
+            )
+        )
     }
 
     override fun editLand(landId: Long, landDtoRequest: LandDtoRequest?): LandDtoResponse {
