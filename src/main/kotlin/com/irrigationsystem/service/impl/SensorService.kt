@@ -1,4 +1,4 @@
-package com.irrigationsystem.service
+package com.irrigationsystem.service.impl
 
 import com.irrigationsystem.dto.SensorDtoRequest
 import com.irrigationsystem.dto.SensorDtoResponse
@@ -7,6 +7,7 @@ import com.irrigationsystem.exceptions.IdDoesNotExistException
 import com.irrigationsystem.exceptions.InvalidRequestBodyException
 import com.irrigationsystem.mapper.SensorMapper
 import com.irrigationsystem.repository.ISensorRepository
+import com.irrigationsystem.service.ISensorService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.Optional
-import kotlin.math.log
 
 @Service
 @Transactional

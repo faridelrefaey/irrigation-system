@@ -14,8 +14,8 @@ import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
 import com.irrigationsystem.repository.ISensorRepository
 import com.irrigationsystem.repository.IIrrigationConfigurationRepository
-import com.irrigationsystem.service.IrrigationConfigurationService
-import com.irrigationsystem.service.IrrigationPeriodService
+import com.irrigationsystem.service.impl.IrrigationConfigurationService
+import com.irrigationsystem.service.impl.IrrigationPeriodService
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.every
@@ -56,8 +56,8 @@ class IrrigationConfigurationServiceTest {
         landForMocking = Land(id = 1, seedType = "Corn", landName = "Corn Field", area = 12.5, irrigationConfigurationList = mutableListOf())
         sensorForMocking = Sensor(id = 1, sensorName = "Sensor1")
         irrigationConfigurationDtoRequestToBeUsed1 = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             landId = 1,
@@ -77,13 +77,13 @@ class IrrigationConfigurationServiceTest {
 
     @Test
     fun testCreateIrrigationConfiguration(){
-        val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2023-08-01T00:00:00"))
-        val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2023-08-02T13:00:00"))
-        val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2023-08-04T02:00:00"))
+        val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2026-08-01T00:00:00"))
+        val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2026-08-02T13:00:00"))
+        val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2026-08-04T02:00:00"))
         val irrigationConfigurationExpected = IrrigationConfiguration(
             id = 1,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,
@@ -92,8 +92,8 @@ class IrrigationConfigurationServiceTest {
         )
         val irrigationConfigurationToBeSaved = IrrigationConfiguration(
             id = null,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,
@@ -101,9 +101,9 @@ class IrrigationConfigurationServiceTest {
         )
 
 
-        val irrigationPeriodToBeSaved1 = IrrigationPeriod(startTime = LocalDateTime.parse("2023-08-01T00:00:00"), irrigationConfiguration = irrigationConfigurationToBeSaved)
-        val irrigationPeriodToBeSaved2 = IrrigationPeriod(startTime = LocalDateTime.parse("2023-08-02T13:00:00"), irrigationConfiguration = irrigationConfigurationToBeSaved)
-        val irrigationPeriodToBeSaved3 = IrrigationPeriod(startTime = LocalDateTime.parse("2023-08-04T02:00:00"), irrigationConfiguration = irrigationConfigurationToBeSaved)
+        val irrigationPeriodToBeSaved1 = IrrigationPeriod(startTime = LocalDateTime.parse("2026-08-01T00:00:00"), irrigationConfiguration = irrigationConfigurationToBeSaved)
+        val irrigationPeriodToBeSaved2 = IrrigationPeriod(startTime = LocalDateTime.parse("2026-08-02T13:00:00"), irrigationConfiguration = irrigationConfigurationToBeSaved)
+        val irrigationPeriodToBeSaved3 = IrrigationPeriod(startTime = LocalDateTime.parse("2026-08-04T02:00:00"), irrigationConfiguration = irrigationConfigurationToBeSaved)
 
         every { landRepository.findById(1L) } returns Optional.of(landForMocking)
         every { sensorRepository.findById(1L) } returns Optional.of(sensorForMocking)
@@ -122,8 +122,8 @@ class IrrigationConfigurationServiceTest {
     @Test
     fun testCreateIrrigationConfigurationWithNullSensorIdAndLandId(){
         val irrigationConfigurationDtoRequestNullSensorId = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-07T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-07T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 25.0,
             landId = 1,
@@ -131,8 +131,8 @@ class IrrigationConfigurationServiceTest {
         )
 
         val irrigationConfigurationDtoRequestNullLandId = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-07T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-07T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 25.0,
             landId = null,
@@ -148,7 +148,7 @@ class IrrigationConfigurationServiceTest {
     fun testCreateIrrigationConfigurationWithNullStartDateAndNullEndDate(){
         val irrigationConfigurationDtoRequestNullStartDate = IrrigationConfigurationDtoRequest(
             startDate = null,
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 25.0,
             landId = 1,
@@ -156,7 +156,7 @@ class IrrigationConfigurationServiceTest {
         )
 
         val irrigationConfigurationDtoRequestNullEndDate = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-07T00:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-07T00:00:00.0"),
             endDate = null,
             timesToWaterDuringInterval = 3,
             waterAmount = 25.0,
@@ -171,8 +171,8 @@ class IrrigationConfigurationServiceTest {
     @Test
     fun testCreateIrrigationConfigurationWithNullTimesToWater(){
         val irrigationConfigurationDtoRequestNullTimesToWater = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-07T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-07T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = null,
             waterAmount = 25.0,
             landId = 1,
@@ -184,8 +184,8 @@ class IrrigationConfigurationServiceTest {
     @Test
     fun testCreateIrrigationConfigurationWithNullWaterAmount(){
         val irrigationConfigurationDtoRequestNullWaterAmount = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-07T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-07T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = null,
             landId = 1,
@@ -199,8 +199,8 @@ class IrrigationConfigurationServiceTest {
     @Test
     fun testCreateIrrigationConfigurationWithStartDateGreaterThanEndDate(){
         val irrigationConfigurationDtoRequest1 = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-10T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-10T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 25.0,
             landId = 1,
@@ -213,7 +213,7 @@ class IrrigationConfigurationServiceTest {
     fun testCreateIrrigationConfigurationWithStartDateInThePast(){
         val irrigationConfigurationDtoRequest1 = IrrigationConfigurationDtoRequest(
             startDate = LocalDateTime.parse("2023-07-10T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-10T15:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-10T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 25.0,
             landId = 1,
@@ -226,8 +226,8 @@ class IrrigationConfigurationServiceTest {
     @Test
     fun testCreateIrrigationConfigurationWithLandIdAndSensorId(){
         val irrigationConfigurationDtoRequestNullWaterAmount = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-07T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-07T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             landId = 2,
@@ -242,14 +242,14 @@ class IrrigationConfigurationServiceTest {
 
     @Test
     fun testCreateIrrigationConfigurationForABusySensor(){
-        val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2023-08-01T00:00:00"))
-        val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2023-08-02T13:00:00"))
-        val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2023-08-04T02:00:00"))
-        val land: Land = Land(id = 2L, seedType = "a", landName = "a", area = 12.5)
+        val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2026-08-01T00:00:00"))
+        val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2026-08-02T13:00:00"))
+        val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2026-08-04T02:00:00"))
+        val land = Land(id = 2L, seedType = "a", landName = "a", area = 12.5)
         val irrigationConfigurationExpected = IrrigationConfiguration(
             id = 1,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = land,
@@ -265,13 +265,13 @@ class IrrigationConfigurationServiceTest {
 
     @Test
     fun testCreateIrrigationConfigurationForAnIntersectingDateRangeWithSameLandAndSensor(){
-        val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2023-08-01T00:00:00"))
-        val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2023-08-02T13:00:00"))
-        val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2023-08-04T02:00:00"))
+        val irrigationPeriodExpected1 = IrrigationPeriod(id = 1L, startTime = LocalDateTime.parse("2026-08-01T00:00:00"))
+        val irrigationPeriodExpected2 = IrrigationPeriod(id = 2L, startTime = LocalDateTime.parse("2026-08-02T13:00:00"))
+        val irrigationPeriodExpected3 = IrrigationPeriod(id = 3L, startTime = LocalDateTime.parse("2026-08-04T02:00:00"))
         val irrigationConfigurationExpected = IrrigationConfiguration(
             id = 1,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,
@@ -280,8 +280,8 @@ class IrrigationConfigurationServiceTest {
         )
 
         val irrigationConfigurationDtoRequest = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-02T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-08T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-02T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-08T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             landId = 1,
@@ -299,8 +299,8 @@ class IrrigationConfigurationServiceTest {
     fun testGetAllIrrigationConfiguration(){
         val irrigationConfigurationExpected1 = IrrigationConfiguration(
             id = 1,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,
@@ -309,8 +309,8 @@ class IrrigationConfigurationServiceTest {
 
         val irrigationConfigurationExpected2 = IrrigationConfiguration(
             id = 2,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,
@@ -325,8 +325,8 @@ class IrrigationConfigurationServiceTest {
     fun testGetIrrigationConfigurationById(){
         val irrigationConfigurationExpected = IrrigationConfiguration(
             id = 1,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,
@@ -347,8 +347,8 @@ class IrrigationConfigurationServiceTest {
     fun testDeleteIrrigationConfigurationById(){
         val irrigationConfigurationExpected = IrrigationConfiguration(
             id = 1,
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-05T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-05T15:00:00.0"),
             timesToWaterDuringInterval = 3,
             waterAmount = 12.5,
             land = landForMocking,

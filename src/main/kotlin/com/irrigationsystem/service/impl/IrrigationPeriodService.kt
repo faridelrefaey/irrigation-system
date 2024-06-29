@@ -1,16 +1,17 @@
-package com.irrigationsystem.service
+package com.irrigationsystem.service.impl
 
 import com.irrigationsystem.dto.IrrigationPeriodDtoResponse
 import com.irrigationsystem.entity.IrrigationPeriod
 import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.IIrrigationPeriodRepository
+import com.irrigationsystem.service.IIrrigationPeriodService
+import com.irrigationsystem.service.ISensorService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 @Service
 @Transactional

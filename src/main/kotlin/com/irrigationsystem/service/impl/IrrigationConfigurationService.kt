@@ -1,4 +1,4 @@
-package com.irrigationsystem.service
+package com.irrigationsystem.service.impl
 
 import com.irrigationsystem.dto.IrrigationConfigurationDtoRequest
 import com.irrigationsystem.dto.IrrigationConfigurationDtoResponse
@@ -17,6 +17,8 @@ import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.ILandRepository
 import com.irrigationsystem.repository.ISensorRepository
 import com.irrigationsystem.repository.IIrrigationConfigurationRepository
+import com.irrigationsystem.service.IIrrigationConfigurationService
+import com.irrigationsystem.service.IIrrigationPeriodService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

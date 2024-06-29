@@ -7,9 +7,7 @@ import com.irrigationsystem.exceptions.IdDoesNotExistException
 import com.irrigationsystem.exceptions.InvalidRequestBodyException
 import com.irrigationsystem.mapper.LandMapper
 import com.irrigationsystem.repository.ILandRepository
-import com.irrigationsystem.service.ISensorService
-import com.irrigationsystem.service.LandService
-import com.irrigationsystem.service.SensorService
+import com.irrigationsystem.service.impl.LandService
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.every
@@ -19,12 +17,12 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.context.TestPropertySource
 import java.util.*
 
 @SpringBootTest
+@TestPropertySource("/application-test.properties")
 class LandServiceTest {
 
     @MockK

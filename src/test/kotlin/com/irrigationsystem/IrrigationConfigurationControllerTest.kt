@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.irrigationsystem.dto.IrrigationConfigurationDtoRequest
 import com.irrigationsystem.dto.LandDtoRequest
 import com.irrigationsystem.dto.SensorDtoRequest
-import com.irrigationsystem.entity.IrrigationConfiguration
-import com.irrigationsystem.service.IrrigationConfigurationService
-import com.irrigationsystem.service.LandService
-import com.irrigationsystem.service.SensorService
+import com.irrigationsystem.service.impl.IrrigationConfigurationService
+import com.irrigationsystem.service.impl.LandService
+import com.irrigationsystem.service.impl.SensorService
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,9 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -45,16 +42,16 @@ class IrrigationConfigurationControllerTest(
     @BeforeEach
     fun setUp(){
         irrigationConfigurationDtoRequest1 = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-01T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-01T15:00:00.0"),
             timesToWaterDuringInterval = 2,
             waterAmount = 12.5,
             landId = 1,
             sensorId = 1
         )
         irrigationConfigurationDtoRequest2 = IrrigationConfigurationDtoRequest(
-            startDate = LocalDateTime.parse("2023-08-01T00:00:00.0"),
-            endDate = LocalDateTime.parse("2023-08-01T15:00:00.0"),
+            startDate = LocalDateTime.parse("2026-08-01T00:00:00.0"),
+            endDate = LocalDateTime.parse("2026-08-01T15:00:00.0"),
             timesToWaterDuringInterval = 2,
             waterAmount = 12.5,
             landId = 2,
@@ -76,19 +73,19 @@ class IrrigationConfigurationControllerTest(
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.startDate").value("2023-08-01T00:00:00"))
-            .andExpect(jsonPath("$.endDate").value("2023-08-01T15:00:00"))
+            .andExpect(jsonPath("$.startDate").value("2026-08-01T00:00:00"))
+            .andExpect(jsonPath("$.endDate").value("2026-08-01T15:00:00"))
             .andExpect(jsonPath("$.timesToWaterDuringInterval").value(2))
             .andExpect(jsonPath("$.waterAmount").value(12.5))
             .andExpect(jsonPath("$.sensor.id").value(1))
             .andExpect(jsonPath("$.sensor.sensorName").value("Sensor1"))
             .andExpect(jsonPath("$.irrigationPeriodList", hasSize<Any>(2)))
             .andExpect(jsonPath("$.irrigationPeriodList[0].id").value(1))
-            .andExpect(jsonPath("$.irrigationPeriodList[0].startTime").value("2023-08-01T00:00:00"))
+            .andExpect(jsonPath("$.irrigationPeriodList[0].startTime").value("2026-08-01T00:00:00"))
             .andExpect(jsonPath("$.irrigationPeriodList[0].endTime").value(null))
             .andExpect(jsonPath("$.irrigationPeriodList[0].isSuccessful").value(false))
             .andExpect(jsonPath("$.irrigationPeriodList[1].id").value(2))
-            .andExpect(jsonPath("$.irrigationPeriodList[1].startTime").value("2023-08-01T07:30:00"))
+            .andExpect(jsonPath("$.irrigationPeriodList[1].startTime").value("2026-08-01T07:30:00"))
             .andExpect(jsonPath("$.irrigationPeriodList[1].endTime").value(null))
             .andExpect(jsonPath("$.irrigationPeriodList[1].isSuccessful").value(false))
     }

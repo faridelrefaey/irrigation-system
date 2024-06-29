@@ -2,24 +2,17 @@ package com.irrigationsystem
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.irrigationsystem.dto.LandDtoRequest
-import com.irrigationsystem.repository.ILandRepository
 import com.irrigationsystem.service.ILandService
-import com.irrigationsystem.service.LandService
 import org.hamcrest.Matchers.hasSize
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.RequestBuilder
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 

@@ -1,26 +1,24 @@
 package com.irrigationsystem
 
-import com.irrigationsystem.entity.IrrigationConfiguration
 import com.irrigationsystem.entity.IrrigationPeriod
-import com.irrigationsystem.entity.Land
-import com.irrigationsystem.entity.Sensor
 import com.irrigationsystem.mapper.IrrigationPeriodMapper
 import com.irrigationsystem.repository.IIrrigationPeriodRepository
 import com.irrigationsystem.service.ISensorService
-import com.irrigationsystem.service.IrrigationPeriodService
+import com.irrigationsystem.service.impl.IrrigationPeriodService
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import org.aspectj.lang.annotation.After
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.TestPropertySource
 import java.time.LocalDateTime
 
 @SpringBootTest
+@TestPropertySource("/application-test.properties")
 class IrrigationPeriodServiceTest {
 
     @MockK

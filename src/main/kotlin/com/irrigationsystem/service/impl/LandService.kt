@@ -1,4 +1,4 @@
-package com.irrigationsystem.service
+package com.irrigationsystem.service.impl
 
 import com.irrigationsystem.dto.LandDtoRequest
 import com.irrigationsystem.dto.LandDtoResponse
@@ -7,10 +7,8 @@ import com.irrigationsystem.exceptions.IdDoesNotExistException
 import com.irrigationsystem.exceptions.InvalidRequestBodyException
 import com.irrigationsystem.mapper.LandMapper
 import com.irrigationsystem.repository.ILandRepository
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.irrigationsystem.service.ILandService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
