@@ -334,6 +334,7 @@ string
 ```
 
 ### Authentication: <br>
+We have 2 roles in the application, ENGINEER and FARMER. On registration, if the username includes engineer, it will be registered as an ENGINEER, else as a FARMER.
 - POST "/auth/register": <br>
 
 Request Body:
