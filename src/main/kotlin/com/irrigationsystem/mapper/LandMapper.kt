@@ -3,6 +3,7 @@ package com.irrigationsystem.mapper
 import com.irrigationsystem.dto.LandDtoRequest
 import com.irrigationsystem.dto.LandDtoResponse
 import com.irrigationsystem.entity.Land
+import com.irrigationsystem.security.entity.User
 
 class LandMapper {
 
@@ -19,11 +20,12 @@ class LandMapper {
     }
 
 
-    fun mapDtoRequestToEntity(landDtoRequest: LandDtoRequest): Land{
+    fun mapDtoRequestToEntity(landDtoRequest: LandDtoRequest, user: User): Land{
         return Land(
             landName = landDtoRequest.landName,
             area = landDtoRequest.area,
-            seedType = landDtoRequest.seedType
+            seedType = landDtoRequest.seedType,
+            user = user
         )
     }
 }

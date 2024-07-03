@@ -9,26 +9,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class ExceptionHandler {
 
     @ExceptionHandler
-    fun handleIdDoesNotExistException(ex: IdDoesNotExistException): ResponseEntity<ErrorMessageModel>{
-        val error = ErrorMessageModel(httpStatus = HttpStatus.NOT_FOUND, status = HttpStatus.NOT_FOUND.value(), message = ex.message)
-        return ResponseEntity(error, HttpStatus.NOT_FOUND)
-    }
-
-    @ExceptionHandler
-    fun handleInvalidTimeException(ex: InvalidTimeException): ResponseEntity<ErrorMessageModel>{
+    fun handleIrrigationSystemException(ex: IrrigationSystemException): ResponseEntity<ErrorMessageModel>{
         val error = ErrorMessageModel(httpStatus = HttpStatus.BAD_REQUEST, status = HttpStatus.BAD_REQUEST.value(), message = ex.message)
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler
-    fun handleInvalidRequestBodyException(ex: InvalidRequestBodyException): ResponseEntity<ErrorMessageModel>{
-        val error = ErrorMessageModel(httpStatus = HttpStatus.BAD_REQUEST, status = HttpStatus.BAD_REQUEST.value(), message = ex.message)
-        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
+    fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ErrorMessageModel>{
+        val error = ErrorMessageModel(httpStatus = ex.statusCode, status = ex.statusCode.value(), message = ex.message)
+        return ResponseEntity(error, ex.statusCode)
     }
 
-    @ExceptionHandler
-    fun handleInvalidSensorException(ex: InvalidSensorException): ResponseEntity<ErrorMessageModel>{
-        val error = ErrorMessageModel(httpStatus = HttpStatus.BAD_REQUEST, status = HttpStatus.BAD_REQUEST.value(), message = ex.message)
-        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
-    }
 }

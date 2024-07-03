@@ -3,8 +3,7 @@ package com.irrigationsystem.service.impl
 import com.irrigationsystem.dto.SensorDtoRequest
 import com.irrigationsystem.dto.SensorDtoResponse
 import com.irrigationsystem.entity.Sensor
-import com.irrigationsystem.exceptions.IdDoesNotExistException
-import com.irrigationsystem.exceptions.InvalidRequestBodyException
+import com.irrigationsystem.exceptions.IrrigationSystemException
 import com.irrigationsystem.mapper.SensorMapper
 import com.irrigationsystem.repository.ISensorRepository
 import com.irrigationsystem.service.ISensorService
@@ -19,7 +18,6 @@ import java.util.Optional
 
 @Service
 @Transactional
-
 class SensorService(
     @Autowired private val sensorRepository: ISensorRepository
 ): ISensorService {
@@ -40,7 +38,7 @@ class SensorService(
         val optionalSensor: Optional<Sensor> = sensorRepository.findById(sensorId)
 
         if(optionalSensor.isEmpty){
-            throw IdDoesNotExistException("No sensor with the given ID was found")
+            throw IrrigationSystemException("No sensor with the given ID was found")
         }
         return sensorMapper.mapEntityToDtoResponse(optionalSensor.get())
     }
@@ -49,11 +47,11 @@ class SensorService(
         val optionalSensor: Optional<Sensor> = sensorRepository.findById(sensorId)
 
         if(optionalSensor.isEmpty){
-            throw IdDoesNotExistException("No sensor with the given ID was found")
+            throw IrrigationSystemException("No sensor with the given ID was found")
         }
 
         if(sensorDtoRequest == null){
-            throw InvalidRequestBodyException("Please add a sensor request body.")
+            throw IrrigationSystemException("Please add a sensor request body.")
         }
 
         optionalSensor.get().sensorName = sensorDtoRequest.sensorName

@@ -2,6 +2,7 @@ package com.irrigationsystem.controller
 
 import com.irrigationsystem.dto.LandDtoRequest
 import com.irrigationsystem.dto.LandDtoResponse
+import com.irrigationsystem.security.annotations.IsFarmerUser
 import com.irrigationsystem.service.ILandService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/land")
+@IsFarmerUser
 class LandController(@Autowired private val iLandService: ILandService) {
+
 
     @PostMapping
     fun createLand(@RequestBody landDtoRequest: LandDtoRequest): ResponseEntity<LandDtoResponse>{

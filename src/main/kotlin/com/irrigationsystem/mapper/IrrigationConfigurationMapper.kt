@@ -3,6 +3,7 @@ package com.irrigationsystem.mapper
 import com.irrigationsystem.dto.IrrigationConfigurationDtoRequest
 import com.irrigationsystem.dto.IrrigationConfigurationDtoResponse
 import com.irrigationsystem.entity.IrrigationConfiguration
+import com.irrigationsystem.security.entity.User
 
 class IrrigationConfigurationMapper {
 
@@ -21,12 +22,13 @@ class IrrigationConfigurationMapper {
         )
     }
 
-    fun mapDtoRequestToEntity(irrigationConfigurationDtoRequest: IrrigationConfigurationDtoRequest): IrrigationConfiguration{
+    fun mapDtoRequestToEntity(irrigationConfigurationDtoRequest: IrrigationConfigurationDtoRequest, user: User): IrrigationConfiguration{
         return IrrigationConfiguration(
             startDate = irrigationConfigurationDtoRequest.startDate,
             endDate = irrigationConfigurationDtoRequest.endDate,
             timesToWaterDuringInterval = irrigationConfigurationDtoRequest.timesToWaterDuringInterval,
-            waterAmount = irrigationConfigurationDtoRequest.waterAmount
+            waterAmount = irrigationConfigurationDtoRequest.waterAmount,
+            user = user
         )
     }
 

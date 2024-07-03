@@ -1,7 +1,5 @@
 package com.irrigationsystem.dto
 
-import com.irrigationsystem.entity.Land
-import com.irrigationsystem.entity.Sensor
 import java.time.LocalDateTime
 
 data class IrrigationConfigurationDtoRequest(

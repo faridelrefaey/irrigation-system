@@ -1,5 +1,6 @@
 package com.irrigationsystem.entity
 
+import com.irrigationsystem.security.entity.User
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -19,6 +20,8 @@ data class IrrigationConfiguration(
     @JoinColumn(name = "sensor_id")
     var sensor: Sensor? = null,
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "irrigationConfiguration", fetch = FetchType.EAGER)
-    var irrigationPeriodList: MutableList<IrrigationPeriod> = mutableListOf()
-
+    var irrigationPeriodList: MutableList<IrrigationPeriod> = mutableListOf(),
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    var user: User? = null
 )

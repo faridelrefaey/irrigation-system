@@ -2,6 +2,7 @@ package com.irrigationsystem.controller
 
 import com.irrigationsystem.dto.SensorDtoRequest
 import com.irrigationsystem.dto.SensorDtoResponse
+import com.irrigationsystem.security.annotations.IsEngineerUser
 import com.irrigationsystem.service.ISensorService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/sensor")
+@IsEngineerUser
 class SensorController(@Autowired private val sensorService: ISensorService) {
 
     @PostMapping
