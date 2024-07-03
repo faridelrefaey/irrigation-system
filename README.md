@@ -16,7 +16,8 @@ Irrigation periods are the main driver for operating the sensors. These periods 
 Irrigation periods are created based on the 3 fields mentioned above with each period having a start date and an end date(once the sensor is done).
 
 ### API Endpoints ###
-All the API's documentation could be found in the Swagger documentation "/swagger-ui.html"
+All the API's documentation could be found in the Swagger documentation "/swagger-ui.html".<br>
+All endpoints other than the authentication are secured and should take the token created in login as an Authorization bearer token.
 #### Land: <br> 
 - POST "/land": <br>
 
@@ -330,4 +331,35 @@ Response:
 Response:
 ```
 string
+```
+
+### Authentication: <br>
+- POST "/auth/register": <br>
+
+Request Body:
+```JSON
+{
+  "username": "farid.farmer",
+  "password": "12345"
+}
+```
+Response:
+```
+string
+```
+
+- POST "/auth/login": <br>
+
+Request Body:
+```JSON
+{
+  "username": "farid.farmer",
+  "password": "12345"
+}
+```
+Response:
+```JSON
+{
+  "token": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJGYXJpZCBFbHJlZmFleSIsImlhdCI6MTcyMDAwMzU5OCwiZXhwIjoxNzIwMDA3MTk4LCJ1c2VybmFtZSI6ImZhcmlkLmVuZ2luZWVyIiwicm9sZSI6IkVOR0lORUVSIn0.lVkjlO5lc4cQICIsQndten6t3tIOs055LV563tOMRj75x32eAPXTcGBGZvsBbLjfMtrskcsBmZJdLjFRgoU8FQ"
+}
 ```
